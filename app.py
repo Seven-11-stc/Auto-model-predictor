@@ -65,10 +65,14 @@ def main():
                 y_proba = None
             labels = np.unique(st.session_state['y_test'])
             st.write("### Confusion Matrix")
-            plot_confusion_matrix(st.session_state['y_test'], y_pred, labels)
+            cm_fig = plot_confusion_matrix(st.session_state['y_test'], y_pred, labels)
+            st.pyplot(cm_fig) # Display the captured figure
             if y_proba is not None:
                 st.write("### ROC Curve")
-                plot_roc_curve(st.session_state['y_test'], y_proba, labels)
+                # Ensure labels are suitable for predict_proba output (typically 0, 1, ... n_classes-1)
+                # np.unique(st.session_state['y_test']) should provide these if y_test is label encoded.
+                roc_fig = plot_roc_curve(st.session_state['y_test'], y_proba, labels)
+                st.pyplot(roc_fig) # Display the captured figure
 
 if __name__ == "__main__":
     main()
