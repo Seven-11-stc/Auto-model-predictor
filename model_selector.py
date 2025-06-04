@@ -9,6 +9,7 @@ from sklearn.model_selection import GridSearchCV, cross_val_score
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix
 import numpy as np
 import pandas as pd
+import sys # Added for stderr output
 
 # Add XGBoost
 try:
@@ -86,7 +87,8 @@ class ModelSelector:
                         auc = roc_auc_score(y_test, y_proba, multi_class='ovr')
                 else:
                     auc = np.nan
-            except Exception:
+            except ValueError as e:
+                print(f"Warning: Could not calculate AUC for model {name}. Error: {e}", file=sys.stderr)
                 auc = np.nan
             metrics = {
                 'accuracy': accuracy_score(y_test, y_pred),
